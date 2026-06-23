@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Around the World — Year 9 Geography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green-dark:#0F6E56;--green-mid:#1D9E75;--green-light:#E1F5EE;--green-text:#04342C;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-text:#633806;
+  --red-light:#FCEBEB;--red-text:#791F1F;--red-border:#F09595;
+  --bg:#F7F6F3;--surface:#FFFFFF;--border:#E2E0DA;
+  --text:#1A1916;--text-muted:#6B6A65;--text-faint:#9C9B96;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+.topbar{background:var(--green-dark);color:#fff;padding:0.65rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:13px;}
+.topbar-title{font-weight:600;letter-spacing:0.01em;}
+.topbar-sub{opacity:0.65;}
+.container{max-width:660px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+.screen{display:none;}.screen.active{display:block;}
+
+/* Welcome */
+.welcome-hero{background:var(--green-dark);border-radius:var(--radius);padding:2.5rem 2rem;text-align:center;color:#fff;margin-bottom:1.25rem;}
+.hero-icon{font-size:48px;margin-bottom:1rem;display:block;}
+.hero-title{font-size:24px;font-weight:600;margin-bottom:0.5rem;line-height:1.3;}
+.hero-sub{font-size:14px;opacity:0.8;max-width:400px;margin:0 auto 1.75rem;line-height:1.65;}
+.name-wrap{max-width:300px;margin:0 auto;}
+.name-wrap label{display:block;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;opacity:0.7;margin-bottom:0.4rem;text-align:left;}
+.name-wrap input{width:100%;padding:0.65rem 1rem;border-radius:var(--radius-sm);border:none;font-size:15px;font-family:'Inter',sans-serif;background:rgba(255,255,255,0.15);color:#fff;outline:none;}
+.name-wrap input::placeholder{color:rgba(255,255,255,0.4);}
+.name-wrap input:focus{background:rgba(255,255,255,0.22);}
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem;}
+.info-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:0.75rem;}
+.how-item{display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:0.6rem;font-size:14px;color:var(--text-muted);line-height:1.5;}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--green-light);color:var(--green-dark);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+/* Activity header */
+.act-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0.9rem 1.25rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.act-name{font-size:14px;font-weight:500;color:var(--text);}
+.act-progress{font-size:13px;color:var(--text-muted);}
+.progress-wrap{height:5px;background:var(--border);border-radius:99px;margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;background:var(--green-mid);border-radius:99px;transition:width 0.5s ease;}
+
+/* Leg card */
+.leg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;}
+.leg-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
+.leg-pill{background:var(--green-light);color:var(--green-dark);padding:2px 8px;border-radius:99px;font-size:11px;}
+.coordinates{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:var(--green-dark);margin-bottom:0.5rem;}
+.clue-text{font-size:14px;color:var(--text-muted);line-height:1.65;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);}
+.section-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:0.5rem;}
+.q-text{font-size:14px;color:var(--text-muted);margin-bottom:0.75rem;line-height:1.6;}
+input[type="text"]{width:100%;padding:0.65rem 1rem;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.15s;}
+input[type="text"]:focus{border-color:var(--green-mid);background:#fff;}
+input[type="text"]:disabled{opacity:0.55;cursor:not-allowed;}
+
+.hint-box{background:var(--amber-light);border:1px solid var(--amber);border-radius:var(--radius-sm);padding:0.6rem 0.9rem;font-size:13px;color:var(--amber-text);margin:0.6rem 0;display:none;line-height:1.5;}
+.hint-box.show{display:block;}
+.reveal-box{background:#EDE7F6;border:1px solid #AFA9EC;border-radius:var(--radius-sm);padding:0.6rem 0.9rem;font-size:13px;color:#26215C;margin:0.6rem 0;display:none;line-height:1.5;}
+.reveal-box.show{display:block;}
+.feedback{font-size:13px;padding:0.55rem 0.85rem;border-radius:var(--radius-sm);margin:0.6rem 0;display:none;line-height:1.5;}
+.feedback.wrong{background:var(--red-light);color:var(--red-text);border:1px solid var(--red-border);display:block;}
+.feedback.correct{background:var(--green-light);color:var(--green-text);border:1px solid #9FE1CB;display:block;}
+.btn-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;}
+.btn-primary{background:var(--green-dark);color:#fff;border:none;padding:0.6rem 1.2rem;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:background 0.15s,transform 0.1s;}
+.btn-primary:hover{background:var(--green-mid);}
+.btn-primary:active{transform:scale(0.98);}
+.btn-primary:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+.divider{height:1px;background:var(--border);margin:1.25rem 0;}
+.stamp{display:inline-flex;align-items:center;gap:6px;background:var(--green-light);color:var(--green-text);border:1px solid #9FE1CB;border-radius:var(--radius-sm);padding:0.4rem 0.9rem;font-size:13px;font-weight:500;margin-top:0.5rem;}
+
+/* Locked leg */
+.locked-leg{background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;color:var(--text-faint);font-size:14px;}
+.lock-icon{font-size:20px;opacity:0.4;}
+
+/* Complete screen */
+.complete-hero{background:var(--green-dark);border-radius:var(--radius);padding:2.5rem;text-align:center;color:#fff;margin-bottom:1.25rem;}
+.complete-icon{font-size:48px;margin-bottom:0.75rem;display:block;}
+.complete-title{font-size:22px;font-weight:600;margin-bottom:0.4rem;}
+.complete-sub{font-size:14px;opacity:0.75;max-width:360px;margin:0 auto;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center;}
+.stat-label{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.stat-value{font-size:26px;font-weight:600;color:var(--text);}
+
+@media(max-width:480px){
+  .coordinates{font-size:22px;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🌍 Around the World</div>
+  <div class="topbar-sub">Year 9 Geography · Biomes &amp; Ecosystems</div>
+</div>
+
+<div class="container">
+
+  <!-- WELCOME -->
+  <div id="screen-welcome" class="screen active">
+    <div class="welcome-hero">
+      <span class="hero-icon">🗺️</span>
+      <div class="hero-title">Around the World<br>Latitude &amp; Longitude Activity</div>
+      <div class="hero-sub">Travel to 15 destinations using coordinates. Identify each location, then answer a geography question to unlock the next stop.</div>
+      <div class="name-wrap">
+        <label for="player-name">Your name</label>
+        <input type="text" id="player-name" placeholder="Enter your name..." autocomplete="off" />
+      </div>
+      <div style="margin-top:1rem;">
+        <button class="btn-primary" onclick="startActivity()" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);font-size:15px;padding:0.75rem 2rem;">Begin the activity →</button>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-title">How it works</div>
+      <div class="how-item"><div class="step-num">1</div><div>Each stop gives you a latitude/longitude coordinate and a geographic clue</div></div>
+      <div class="how-item"><div class="step-num">2</div><div>Figure out where in the world you are, then answer a question about that place</div></div>
+      <div class="how-item"><div class="step-num">3</div><div>Wrong answers earn a hint. A second wrong answer reveals the correct answer</div></div>
+      <div class="how-item"><div class="step-num">4</div><div>Complete both parts to unlock the next destination</div></div>
+    </div>
+  </div>
+
+  <!-- ACTIVITY -->
+  <div id="screen-activity" class="screen">
+    <div class="act-header">
+      <div class="act-name" id="act-name">—</div>
+      <div class="act-progress"><span id="completed-count">0</span> of 15 stops completed</div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+    <div id="legs-container"></div>
+  </div>
+
+  <!-- COMPLETE -->
+  <div id="screen-complete" class="screen">
+    <div class="complete-hero">
+      <span class="complete-icon">🎉</span>
+      <div class="complete-title">Activity complete, <span id="finish-name"></span>!</div>
+      <div class="complete-sub">You've travelled to all 15 destinations and answered every geography question.</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Stops visited</div><div class="stat-value">15/15</div></div>
+      <div class="stat-card"><div class="stat-label">Hints used</div><div class="stat-value" id="final-hints">0</div></div>
+      <div class="stat-card"><div class="stat-label">Answers revealed</div><div class="stat-value" id="final-reveals">0</div></div>
+    </div>
+    <div class="info-card">
+      <div class="info-title">Destinations visited</div>
+      <div id="summary-list"></div>
+    </div>
+    <div style="margin-top:1rem;">
+      <button class="btn-primary" onclick="restartActivity()">Start again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const legs=[
+  {coords:"1°S, 37°E",clue:"You're near Africa's highest peak, in a country famous for its long-distance runners and Maasai culture.",location:["kenya","nairobi","mount kenya","mt kenya"],locationLabel:"Kenya",question:"What is the name of Africa's highest mountain, found just across the border in the neighbouring country?",answers:["mount kilimanjaro","kilimanjaro","mt kilimanjaro"],answerLabel:"Mount Kilimanjaro",locationHint:"This East African country starts with 'K' and borders Tanzania to the south.",questionHint:"It's in Tanzania, is the tallest free-standing mountain in the world, and starts with 'K'."},
+  {coords:"35°N, 139°E",clue:"You've landed in one of the world's most populated cities, on an island nation in East Asia known for technology and cherry blossoms.",location:["tokyo","japan"],locationLabel:"Tokyo, Japan",question:"What is the name of the ocean that lies to the east of Japan?",answers:["pacific ocean","the pacific ocean","pacific"],answerLabel:"The Pacific Ocean",locationHint:"This East Asian island nation's capital and country both start with 'T' or 'J'.",questionHint:"It's the world's largest ocean — look to the east of Asia on a map."},
+  {coords:"0°, 78°W",clue:"You're standing almost exactly on the equator, high in the Andes Mountains, in a country literally named after the line running through it.",location:["ecuador","quito"],locationLabel:"Ecuador",question:"What biome would you most likely find on the lower slopes of the Andes in this country?",answers:["tropical rainforest","rainforest","amazon rainforest","tropical forest"],answerLabel:"Tropical Rainforest",locationHint:"This South American country is named after the equator — in Spanish!",questionHint:"This country borders the Amazon basin — think lush, dense, wet vegetation near the equator."},
+  {coords:"48°N, 2°E",clue:"Bonjour! You've arrived in a city famous for its iron tower, art museums, and being the capital of Western Europe's largest country by area.",location:["paris","france"],locationLabel:"Paris, France",question:"What large body of water lies to the west of France?",answers:["atlantic ocean","the atlantic ocean","atlantic","bay of biscay"],answerLabel:"The Atlantic Ocean",locationHint:"The Eiffel Tower is your clue — this European capital starts with 'P'.",questionHint:"Look west of France on a map — it's not the Mediterranean (that's to the south)."},
+  {coords:"27°N, 30°E",clue:"You're in the land of pharaohs and pyramids, in a country that bridges Africa and the Middle East.",location:["egypt","cairo"],locationLabel:"Egypt",question:"What is the name of the world's longest river that flows through this country?",answers:["nile","nile river","the nile","the nile river"],answerLabel:"The Nile River",locationHint:"Think pyramids and ancient history — this North African country starts with 'E'.",questionHint:"It flows north through the Sahara Desert to the Mediterranean Sea and starts with 'N'."},
+  {coords:"34°S, 151°E",clue:"G'day! You've arrived in Australia's largest city by population, near a famous harbour bridge and opera house.",location:["sydney","australia"],locationLabel:"Sydney, Australia",question:"What is the dominant biome found in the interior of Australia (the 'outback')?",answers:["desert","hot desert","arid","outback","semi-arid"],answerLabel:"Desert / Arid",locationHint:"Think of the city with the famous Opera House — it's on Australia's east coast.",questionHint:"Much of Australia's interior is extremely dry and hot — it's one of the driest continents on Earth."},
+  {coords:"78°N, 15°E",clue:"Brrr! You've reached an Arctic archipelago halfway between Norway and the North Pole, where polar bears outnumber people.",location:["svalbard","spitsbergen","norway","longyearbyen"],locationLabel:"Svalbard, Norway",question:"What biome covers the landscape of this frozen Arctic region?",answers:["tundra","arctic tundra"],answerLabel:"Tundra",locationHint:"This Norwegian territory is one of the northernmost places on Earth — look near 80°N on a map.",questionHint:"It's too cold for trees here — think of the coldest biome found near the poles."},
+  {coords:"23°S, 43°W",clue:"You've arrived in South America's most famous city, known for its carnival, the Christ the Redeemer statue, and Copacabana Beach.",location:["rio de janeiro","rio","brazil"],locationLabel:"Rio de Janeiro, Brazil",question:"What is the name of the world's largest tropical rainforest that covers much of this country's interior?",answers:["amazon","amazon rainforest","the amazon","the amazon rainforest","amazon basin"],answerLabel:"The Amazon Rainforest",locationHint:"This South American city is famous for its Carnival festival — it starts with 'R'.",questionHint:"It's named after the great river that flows through it — the world's largest rainforest, starting with 'A'."},
+  {coords:"51°N, 0°W",clue:"You're at the Prime Meridian — the line from which all longitude is measured — in the capital city of the United Kingdom.",location:["london","england","united kingdom","uk","greenwich"],locationLabel:"London, UK",question:"What is the value of the longitude line that passes through Greenwich, London?",answers:["0","0°","0 degrees","zero","zero degrees"],answerLabel:"0° (the Prime Meridian)",locationHint:"This UK capital starts with 'L' and is famous for Big Ben and the River Thames.",questionHint:"You're literally standing on it! All longitude is measured east or west of this line."},
+  {coords:"19°N, 99°W",clue:"You've landed in one of the world's largest cities, the capital of a country known for ancient Aztec history and vibrant cuisine.",location:["mexico city","mexico","ciudad de mexico"],locationLabel:"Mexico City, Mexico",question:"What large body of water lies to the east of Mexico?",answers:["gulf of mexico","the gulf of mexico","caribbean sea","atlantic ocean"],answerLabel:"The Gulf of Mexico",locationHint:"This North American capital is one of the world's largest cities — the country starts with 'M'.",questionHint:"Look east of Mexico on a map — it's a large curved bay that takes its name from the country."},
+  {coords:"60°N, 11°E",clue:"You're in Scandinavia — a mountainous country of fjords, the northern lights, and midnight sun.",location:["norway","oslo"],locationLabel:"Norway",question:"What cold forest biome — also called 'taiga' — covers much of Norway's interior?",answers:["boreal forest","taiga","boreal","coniferous forest"],answerLabel:"Boreal Forest (Taiga)",locationHint:"This Scandinavian country is famous for its fjords — it starts with 'N' and borders Sweden.",questionHint:"Think of the cold forest biome stretching across the top of the Northern Hemisphere — also called taiga."},
+  {coords:"28°N, 3°W",clue:"You're in a vast North African country, much of which is covered by the world's largest hot desert.",location:["algeria","sahara","morocco"],locationLabel:"Algeria / Sahara Region",question:"What is the name of the world's largest hot desert, which dominates North Africa?",answers:["sahara","sahara desert","the sahara","the sahara desert"],answerLabel:"The Sahara Desert",locationHint:"This large North African country borders Morocco and Tunisia — it starts with 'A'.",questionHint:"It stretches from the Atlantic coast to the Red Sea and comes from the Arabic word for 'desert' — starts with 'S'."},
+  {coords:"1°N, 104°E",clue:"You've arrived in one of the world's most modern city-states, a tiny island nation at the southern tip of the Malay Peninsula.",location:["singapore"],locationLabel:"Singapore",question:"What biome is found in the natural areas of Singapore, given its location just 1° north of the equator?",answers:["tropical rainforest","rainforest","tropical forest"],answerLabel:"Tropical Rainforest",locationHint:"This tiny, wealthy Southeast Asian island city-state starts with 'S' and borders Malaysia.",questionHint:"Singapore is just 1° from the equator — what biome thrives in hot, wet equatorial climates?"},
+  {coords:"64°N, 20°W",clue:"You've landed on a volcanic island in the North Atlantic — the land of fire and ice — known for geysers, glaciers, and the Northern Lights.",location:["iceland","reykjavik"],locationLabel:"Iceland",question:"Iceland sits on two tectonic plates moving apart. What is this type of plate boundary called?",answers:["divergent boundary","divergent plate boundary","seafloor spreading","divergence","mid atlantic ridge","mid-atlantic ridge","constructive boundary"],answerLabel:"Divergent (Constructive) Plate Boundary",locationHint:"This Nordic island nation is known as the 'land of fire and ice' — it starts with 'I'.",questionHint:"The North American and Eurasian plates move in opposite directions here — what do we call a boundary where plates move apart?"},
+  {coords:"30°N, 90°E",clue:"Your final stop! You're on the Tibetan Plateau — the world's highest plateau — sometimes called the 'Roof of the World'.",location:["tibet","china","lhasa","tibetan plateau"],locationLabel:"Tibet / Tibetan Plateau",question:"The world's highest mountain range borders the Tibetan Plateau to the south. What is it called?",answers:["himalayas","the himalayas","himalayan mountains","himalaya"],answerLabel:"The Himalayas",locationHint:"You're on the highest plateau on Earth, in a region of China — think 'Roof of the World'.",questionHint:"This mountain range contains Mount Everest — the tallest mountain on Earth. It starts with 'H'."}
+];
+
+let playerName="", completedCount=0, totalHints=0, totalReveals=0;
+let legState=[];
+
+function norm(s){return s.toLowerCase().trim().replace(/[^a-z0-9 ]/g,"");}
+
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+
+function startActivity(){
+  const n=document.getElementById("player-name").value.trim();
+  if(!n){document.getElementById("player-name").focus();return;}
+  playerName=n; completedCount=0; totalHints=0; totalReveals=0;
+  legState=legs.map(()=>({locDone:false,qDone:false,locAttempts:0,qAttempts:0}));
+  document.getElementById("act-name").textContent=playerName+"'s journey";
+  showScreen("screen-activity");
+  renderLegs();
+}
+
+function renderLegs(){
+  document.getElementById("completed-count").textContent=completedCount;
+  document.getElementById("progress").style.width=(completedCount/15*100)+"%";
+  const c=document.getElementById("legs-container");
+  c.innerHTML="";
+  legs.forEach((leg,i)=>{
+    const st=legState[i];
+    const unlocked=i===0||(legState[i-1].locDone&&legState[i-1].qDone);
+    const done=st.locDone&&st.qDone;
+    if(!unlocked){
+      const d=document.createElement("div");
+      d.className="locked-leg";
+      d.innerHTML=`<span class="lock-icon">🔒</span><span>Stop ${i+1} — Complete the previous stop to unlock</span>`;
+      c.appendChild(d);
+      return;
+    }
+    const card=document.createElement("div");
+    card.className="leg-card"; card.id="leg-"+i;
+    card.innerHTML=`
+      <div class="leg-eyebrow">Stop ${i+1} of 15 <span class="leg-pill">📍 ${leg.locationLabel}</span></div>
+      <div class="coordinates">${leg.coords}</div>
+      <div class="clue-text">${leg.clue}</div>
+      <div id="loc-sec-${i}">
+        <div class="section-title">Where in the world are you?</div>
+        ${st.locDone
+          ? `<div class="feedback correct">✓ ${leg.locationLabel}</div>`
+          : `<input type="text" id="loc-inp-${i}" placeholder="City, country, or region..." autocomplete="off" />
+             <div class="hint-box${st.locAttempts>=1?' show':''}" id="loc-hint-${i}"><strong>Hint:</strong> ${leg.locationHint}</div>
+             <div class="reveal-box${st.locAttempts>=2?' show':''}" id="loc-rev-${i}"><strong>Answer:</strong> ${leg.locationLabel}</div>
+             <div class="feedback" id="loc-fb-${i}"></div>
+             <div class="btn-row"><button class="btn-primary" onclick="checkLoc(${i})">Check answer</button></div>`}
+      </div>
+      ${st.locDone ? `
+      <div class="divider"></div>
+      <div id="q-sec-${i}">
+        <div class="section-title">Geography question</div>
+        <div class="q-text">${leg.question}</div>
+        ${st.qDone
+          ? `<div class="feedback correct">✓ ${leg.answerLabel}</div>
+             <div class="stamp">✈ Stop ${i+1} complete!</div>
+             ${i<14?`<div class="btn-row" style="margin-top:0.75rem;"><button class="btn-primary" onclick="scrollToNext(${i+1})">Next stop →</button></div>`:''}`
+          : `<input type="text" id="q-inp-${i}" placeholder="Your answer..." autocomplete="off" />
+             <div class="hint-box${st.qAttempts>=1?' show':''}" id="q-hint-${i}"><strong>Hint:</strong> ${leg.questionHint}</div>
+             <div class="reveal-box${st.qAttempts>=2?' show':''}" id="q-rev-${i}"><strong>Answer:</strong> ${leg.answerLabel}</div>
+             <div class="feedback" id="q-fb-${i}"></div>
+             <div class="btn-row"><button class="btn-primary" onclick="checkQ(${i})">Submit answer</button></div>`}
+      </div>` : ""}
+    `;
+    c.appendChild(card);
+    if(!st.locDone){
+      const inp=document.getElementById("loc-inp-"+i);
+      if(inp) inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkLoc(i);});
+    } else if(!st.qDone){
+      const inp=document.getElementById("q-inp-"+i);
+      if(inp) inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkQ(i);});
+    }
+  });
+}
+
+function checkLoc(i){
+  const leg=legs[i], st=legState[i];
+  const inp=document.getElementById("loc-inp-"+i);
+  if(!inp)return;
+  const val=inp.value, n=norm(val);
+  const ok=leg.location.some(a=>n.includes(norm(a)));
+  const fb=document.getElementById("loc-fb-"+i);
+  if(ok){
+    st.locDone=true;
+    renderLegs();
+    setTimeout(()=>{const qs=document.getElementById("q-inp-"+i); if(qs)qs.focus();},100);
+  } else {
+    st.locAttempts++;
+    if(st.locAttempts===1) totalHints++;
+    if(st.locAttempts>=2){totalReveals++;document.getElementById("loc-rev-"+i).classList.add("show");}
+    document.getElementById("loc-hint-"+i).classList.add("show");
+    fb.className="feedback wrong";
+    fb.textContent=st.locAttempts===1?"Not quite — check the hint below and try again!":"Here's the answer above — read it, then try the geography question!";
+    if(st.locAttempts>=2){
+      st.locDone=true;
+      setTimeout(()=>renderLegs(),1800);
+    }
+  }
+}
+
+function checkQ(i){
+  const leg=legs[i], st=legState[i];
+  const inp=document.getElementById("q-inp-"+i);
+  if(!inp)return;
+  const val=inp.value, n=norm(val);
+  const ok=leg.answers.some(a=>n.includes(norm(a)));
+  const fb=document.getElementById("q-fb-"+i);
+  if(ok){
+    st.qDone=true;
+    completedCount++;
+    if(completedCount===15){setTimeout(()=>finishActivity(),600);}
+    else{renderLegs(); setTimeout(()=>scrollToNext(i+1),300);}
+  } else {
+    st.qAttempts++;
+    if(st.qAttempts===1) totalHints++;
+    if(st.qAttempts>=2){totalReveals++;document.getElementById("q-rev-"+i).classList.add("show");}
+    document.getElementById("q-hint-"+i).classList.add("show");
+    fb.className="feedback wrong";
+    fb.textContent=st.qAttempts===1?"Not quite — check the hint below and try again!":"Here's the answer above — make sure you understand it before moving on!";
+    if(st.qAttempts>=2){
+      st.qDone=true; completedCount++;
+      if(completedCount===15){setTimeout(()=>finishActivity(),1800);}
+      else{setTimeout(()=>{renderLegs();scrollToNext(i+1);},1800);}
+    }
+  }
+}
+
+function scrollToNext(i){
+  renderLegs();
+  setTimeout(()=>{
+    const el=document.getElementById("leg-"+i)||document.querySelector(".locked-leg");
+    if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+    const inp=document.getElementById("loc-inp-"+i);
+    if(inp) inp.focus();
+  },100);
+}
+
+function finishActivity(){
+  document.getElementById("finish-name").textContent=playerName;
+  document.getElementById("final-hints").textContent=totalHints;
+  document.getElementById("final-reveals").textContent=totalReveals;
+  document.getElementById("summary-list").innerHTML=legs.map((l,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:0.45rem 0;border-bottom:1px solid var(--border);font-size:13px;">
+      <span style="color:var(--text-faint);min-width:52px;">Stop ${i+1}</span>
+      <span style="color:var(--text);">${l.locationLabel}</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--text-faint);">${l.coords}</span>
+    </div>`).join("");
+  showScreen("screen-complete");
+}
+
+function restartActivity(){showScreen("screen-welcome");document.getElementById("player-name").value="";}
+
+document.getElementById("player-name").addEventListener("keydown",e=>{if(e.key==="Enter")startActivity();});
+</script>
+</body>
+</html>
